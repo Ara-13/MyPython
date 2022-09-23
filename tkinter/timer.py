@@ -1,19 +1,26 @@
 from tkinter import *
 from datetime import datetime as dt
 from time import sleep
+
+stop = False
+
 def stop_timer():
-    timer.config(text="00:00:00")
+    global stop
+    stop = True
     start_btn.config(text="شروع", command=start_timer)
-    raise SystemExit()
 def second_timer(H, M, S):
     for i in range(S, -1, -1):
         sleep(1)
         app.update()
         timer.config(text="%.2d:%.2d:%.2d" % (H, M, i))
+        if stop is True:
+            break
 def start_timer():
+    global stop
+    stop = False if stop is True else False
     start_btn.config(text="توقف", command=stop_timer)
-    s = int(second.get())
-    m = int(minute.get())
+    s = int(second.get()) if int(second.get()) <= 59 else 59
+    m = int(minute.get()) if int(minute.get()) <= 59 else 59
     h = int(hour.get())
     timer.config(text="%.2d:%.2d:%.2d" % (h, m, s))
     second_timer(h, m, s)
